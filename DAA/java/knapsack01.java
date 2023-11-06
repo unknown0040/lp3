@@ -1,33 +1,35 @@
-package Sem7.DAA;
-
 public class knapsack01 {
+    public static void main(String[] args) {
+        int[] p = {0, 1, 2, 5, 6}, wt = {0, 2, 3, 4, 5};
+        int n = p.length - 1, m = 10;
+        knapsack(p, wt, n, m);
+//        System.out.println(knapsack(p, wt, n, m));
 
-    public static int knapSack(int W, int[] wt, int[] val, int n) {
-        int[][] dp = new int[n + 1][W + 1];
-
-        // Build the DP table
-        for (int i = 0; i <= n; i++) {
-            for (int w = 0; w <= W; w++) {
-                if (i == 0 || w == 0) {
-                    dp[i][w] = 0;
-                } else if (wt[i - 1] <= w) {
-                    dp[i][w] = Math.max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
-                } else {
-                    dp[i][w] = dp[i - 1][w];
-                }
-            }
-        }
-
-        return dp[n][W];
     }
 
-    public static void main(String[] args) {
-        int[] val = {60, 100, 120};
-        int[] wt = {10, 20, 30};
-        int W = 50;
-        int n = val.length;
-
-        int result = knapSack(W, wt, val, n);
-        System.out.println(result);
+    static void knapsack(int[] p, int[] wt, int n, int m) {
+        int[][] k = new int[n + 1][m + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= m; w++) {
+                if (i == 0 || w == 0) k[i][w] = 0;
+                else if (wt[i] > w) k[i][w] = k[i - 1][w];
+                else k[i][w] = Math.max(k[i - 1][w], k[i - 1][w - wt[i]] + p[i]);
+            }
+        }
+        int i=n, j=m, res=0;
+        while (i>0 && j>0){
+            if (k[i][j]==k[i-1][j]) {
+                System.out.println(i + " = 0");
+                i--;
+            }
+            else {
+                System.out.println(i + " = 1");
+                j = j - wt[i];
+                i--;
+                res = res + p[i+1];
+            }
+        }
+        System.out.println("Profit: " + res);
+//        return k[n][m];
     }
 }
